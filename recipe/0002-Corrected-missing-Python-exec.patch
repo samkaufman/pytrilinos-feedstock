@@ -1,0 +1,26 @@
+From 1fbfd80a2a4ac47e36bcfbf68cfc47bb04f0c280 Mon Sep 17 00:00:00 2001
+From: Sam Kaufman <emrysk@gmail.com>
+Date: Thu, 25 Jul 2019 15:11:01 -0700
+Subject: [PATCH] Corrected missing Python exec
+
+---
+ packages/PyTrilinos/test/CMakeLists.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/packages/PyTrilinos/test/CMakeLists.txt b/packages/PyTrilinos/test/CMakeLists.txt
+index 618ab2283c..463e6f0ae8 100644
+--- a/packages/PyTrilinos/test/CMakeLists.txt
++++ b/packages/PyTrilinos/test/CMakeLists.txt
+@@ -46,7 +46,8 @@ ENABLE_TESTING()
+ INCLUDE(PyTrilinosMakeTest)
+ 
+ ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/testutil.py
+-  COMMAND ${PyTrilinos_BINARY_DIR}/util/copyWithCMakeSubstitutions.py
++  COMMAND ${PYTHON_EXECUTABLE}
++	  ${PyTrilinos_BINARY_DIR}/util/copyWithCMakeSubstitutions.py
+           ${CMAKE_CURRENT_SOURCE_DIR}/testutil.py.in
+ 	  ${CMAKE_CURRENT_BINARY_DIR}/testutil.py
+   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/testutil.py.in)
+-- 
+2.20.1
+
