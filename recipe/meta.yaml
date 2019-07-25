@@ -28,15 +28,17 @@ requirements:
     - numpy >=1.12
     - libblas
     - liblapack
+    - boost >=1.65.0
   run:
     - {{ mpi }}
     - mpi4py
     - python
     - {{ pin_compatible('numpy') }}
+    - boost >=1.65.0
 
 test:
   requires:
-    - cmake 3.9.6
+    - cmake >=3.9.6
     - mpi4py
   imports:
     # - PyTrilinos.Tpetra
