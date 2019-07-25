@@ -1,37 +1,33 @@
 {% set name = "PyTrilinos" %}
-{% set version = "12.10.1" %}
-{% set sha256 = "ea8ff573bb1f452f2585950cdabe7e2c84cb35013844c58dc878c66bd4245e06" %}
-{% set mpi = 'mpich 3.2.*' %}
+{% set version = "12.16.1git" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: trilinos-{{ version }}-Source.tar.gz
-  url: http://trilinos.csbsju.edu/download/files/trilinos-{{ version }}-Source.tar.gz
-  sha256: {{ sha256 }}
+  git_url: https://github.com/trilinos/Trilinos.git
+  git_branch: trilinos-release-12-16-branch
   patches:
-    - 12.10-fixes.patch
+    - 0001-Fixed-SWIGEMPTYHACK-and-missing-namespace-imports.patch
 
 build:
-  number: 2
-  skip: true  # [win or py3k]
+  number: 5
+  skip: true  # [win]
 
 requirements:
   build:
-    - cmake 3.9.6
-    - {{ compiler('fortran') }}
+    - cmake >=2.8.11
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
   host:
     - {{ mpi }}
-    - python
-    - swig 3.0.10
-    - doxygen
-    - numpy
     - mpi4py
-
+    - python
+    - swig >=3.0.11
+    - numpy >=1.12
+    - libblas
+    - liblapack
   run:
     - {{ mpi }}
     - mpi4py
@@ -43,12 +39,12 @@ test:
     - cmake 3.9.6
     - mpi4py
   imports:
+    # - PyTrilinos.Tpetra
+    # - PyTrilinos.Domi
     - PyTrilinos.Teuchos
     - PyTrilinos.Epetra
     - PyTrilinos.TriUtils
-    - PyTrilinos.Tpetra
     - PyTrilinos.EpetraExt
-    - PyTrilinos.Domi
     - PyTrilinos.AztecOO
     - PyTrilinos.Galeri
     - PyTrilinos.Amesos
@@ -68,6 +64,9 @@ about:
     Python interfaces to fast, compiled object-oriented algorithms and
     enabling technologies for the solution of large-scale, complex
     multi-physics engineering and scientific problems.
+
+    (This package is a work-in-progress. Many modules, including Tpetra,
+    are missing.)
   dev_url: https://github.com/trilinos/Trilinos
 
 extra:

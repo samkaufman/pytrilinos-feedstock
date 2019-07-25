@@ -1,0 +1,65 @@
+From 61d4deac47fc4ae4113c46760577479ed953e0cb Mon Sep 17 00:00:00 2001
+From: Sam Kaufman <emrysk@gmail.com>
+Date: Sat, 20 Jul 2019 11:36:10 -0700
+Subject: [PATCH] Fixed SWIGEMPTYHACK and missing namespace imports
+
+---
+ packages/PyTrilinos/src/Epetra_Base.i                  | 1 +
+ packages/PyTrilinos/src/PyTrilinos_Teuchos_Headers.hpp | 1 +
+ packages/PyTrilinos/src/Teuchos_ParameterList.i        | 2 ++
+ packages/PyTrilinos/src/Teuchos_RCP_DAP.i              | 1 +
+ packages/PyTrilinos/src/Teuchos_RCP_typemaps.i         | 1 +
+ 5 files changed, 6 insertions(+)
+
+diff --git a/packages/PyTrilinos/src/Epetra_Base.i b/packages/PyTrilinos/src/Epetra_Base.i
+index b80061aecf..8c504f337e 100644
+--- a/packages/PyTrilinos/src/Epetra_Base.i
++++ b/packages/PyTrilinos/src/Epetra_Base.i
+@@ -264,6 +264,7 @@ import numpy
+ // Use the %teuchos_rcp_dap and %teuchos_rcp_typemaps_overrides macros
+ // to define the %teuchos_rcp_epetra_dap macro
+ %define %teuchos_rcp_epetra_dap(CLASS...)
++  #define SWIGEMPTYHACK
+   %feature("smartptr", noblock=1) Epetra_##CLASS
+   {
+     Teuchos::RCP< Epetra_##CLASS >
+diff --git a/packages/PyTrilinos/src/Teuchos_ParameterList.i b/packages/PyTrilinos/src/Teuchos_ParameterList.i
+index 486b7186b2..727816b9f8 100644
+--- a/packages/PyTrilinos/src/Teuchos_ParameterList.i
++++ b/packages/PyTrilinos/src/Teuchos_ParameterList.i
+@@ -45,6 +45,7 @@
+ %{
+ // Teuchos include files
+ #include "PyTrilinos_Teuchos_Headers.hpp"
++using Teuchos::null;
+ %}
+ 
+ // The python implementation of Teuchos::ParameterList is augmented to
+ // "play nice" with python dictionaries, and to some extent, behave
+diff --git a/packages/PyTrilinos/src/Teuchos_RCP_DAP.i b/packages/PyTrilinos/src/Teuchos_RCP_DAP.i
+index 464275becc..417b70d4ed 100644
+--- a/packages/PyTrilinos/src/Teuchos_RCP_DAP.i
++++ b/packages/PyTrilinos/src/Teuchos_RCP_DAP.i
+@@ -369,6 +369,7 @@
+ %enddef
+ 
+ %define %teuchos_rcp_dap(CONVERTER, CLASS...)
++  #define SWIGEMPTYHACK
+   %teuchos_rcp_dap_typemaps(SWIGEMPTYHACK, CONVERTER, CLASS)
+   %teuchos_rcp_dap_typemaps(const        , CONVERTER, CLASS)
+   %teuchos_rcp_typemaps_overrides(SWIGEMPTYHACK, CLASS)
+diff --git a/packages/PyTrilinos/src/Teuchos_RCP_typemaps.i b/packages/PyTrilinos/src/Teuchos_RCP_typemaps.i
+index 78b9f7a8df..914d1ce5a8 100644
+--- a/packages/PyTrilinos/src/Teuchos_RCP_typemaps.i
++++ b/packages/PyTrilinos/src/Teuchos_RCP_typemaps.i
+@@ -192,6 +192,7 @@
+ // typemaps for both const and non-const versions.
+ %define %teuchos_rcp(CLASS...)
+   %shared_ptr(CLASS)
++  #define SWIGEMPTYHACK
+   %teuchos_rcp_typemaps_overrides(SWIGEMPTYHACK, CLASS)
+   %teuchos_rcp_typemaps_overrides(const, CLASS)
+ %enddef
+-- 
+2.19.1
+
